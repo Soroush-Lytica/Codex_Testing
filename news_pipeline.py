@@ -43,7 +43,7 @@ def load_companies(csv_path: str) -> List[str]:
                 continue
             companies.append(name)
     logging.info("Loaded %d companies", len(companies))
-        return companies
+    return companies
 
 
 def fetch_company_news(company: str) -> List[Dict[str, Any]]:
@@ -151,6 +151,12 @@ def process_companies(csv_path: str, output_path: str) -> None:
                     sentiment=sentiment,
                 )
             )
+
+            if len(processed_articles) >= 10:
+                logging.info(
+                    "Reached limit of 10 valid articles for %s", company
+                )
+                break
 
         results[company] = [asdict(article) for article in processed_articles]
         logging.info("Finished processing %s with %d articles", company, len(processed_articles))
